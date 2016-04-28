@@ -1,0 +1,46 @@
+How to duplicate modules in Eagle easily:
+
+Preliminary:
+============
+
+1- unzip, copy the script files to the default script directory
+   (normally "c:\\Program Files\\eagle-4.11\\scr\\"), copy the
+   ulp files to the ulp default directory ( normally
+    "c:\\Program Files\\eagle-4.11\\ulp\\")
+
+
+
+Duplicating:
+============
+
+1- Close the board, leave the schematic open:
+   with the mouse, locate the two corners of the bloc to be copied,
+   open "duplicate_schematic.ulp" with a text editor and change the
+   coordinates x,y of corner_down_left and corner_up_right as
+   required. change also the others paramreters: nbr_modules,
+   offsetx, offsety, deltay, scr_path and the names of common signals.
+
+2- Launch the script: duplicate_schematic.scr (it will run the above
+   ulp and the script generated automatically in one single step).
+   you should see the new modules copied.
+
+3- Save the new schematic, close it, and open the board only
+
+4- Similarly, with the mouse, locate the two corners of the bloc to
+   be copied, open "duplicate_board.ulp" with a text editor and
+   change the coordinates x,y of corner_down_left and corner_up_right
+   as required. change also the others paramreters: nbr_modules,
+   offsetx, offsety, deltay, scr_path and the names of common signals.
+
+5- You should have the same nbr_modules in the two ULP.
+
+6- Launch the script: duplicate_board.scr (it will run the above ulp
+   and the script generated autiomatically in one single step). You
+   should see the new modules duplicated.
+   
+7- Save the board, that's all. open the schematic, run erc, board
+   and schematic should be consistent
+
+8- enjoy!!!
+
+                                                   Morosh

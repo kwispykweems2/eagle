@@ -1,0 +1,156 @@
+/*
+ *  This EAGLE User Language Program duplicate a portion of a 
+ *    schematic delimited within a rectangle defined by its two diagonal
+      corners down_left and up_right, it performs the function of
+      group, cut, paste, but preserves consistency with board
+      if corresponding modules in board are also duplicated with 
+      "duplicate_board.ulp"
+      
+      it create a script file "duplicated_schematic.scr"
+ 
+ *    Author: Maurice SAAB (Lebanon) morisaab@yahoo.fr
+      Version: 3.0
+ */
+
+int HORZ=0;
+int VERT=1;
+int nb_sig_cmn=0;
+string cmn_sig[];
+/***** edit this parameters according to your need **********************/ 
+real corner_down_left_x=0;    /* lower x of module to be duplicated in inch   */
+real corner_down_left_y=0;    /* lower y of module to be duplicated in inch   */
+real corner_up_right_x=2.8;   /* upper x of module to be duplicated  in inch  */
+real corner_up_right_y=3.8;   /* upper y of module to be duplicated  in inch  */
+int nbr_modules=3;            /* number of modules to be duplicated */
+int direction= VERT;          /* choose VERT or HORZ  */
+real deltay=4;       /* distance verticaly between modules in inch,if direction=VERT, put 0 otherwise  */
+real deltax=4;       /* distance horizontally between modules in inch,if direction=HORZ, put 0 otherwise  */
+int offsetx=3;       /* x origin for destination of duplicated modules */
+int offsety=0;     /* y origin for destination of duplicated modules */
+string scr_path="e:\\my_data\\dev\\eagle\\scr\\"; /* path to your script files, normally "c:\\Program Files\\eagle-4.11\\scr\\"; */
+cmn_sig[nb_sig_cmn++]="VSS";   /* common signal for all modules, if any */
+cmn_sig[nb_sig_cmn++]="VDD";   /* common signal for all modules, if any */
+cmn_sig[nb_sig_cmn++]="GND";   /* common signal for all modules, if any */
+cmn_sig[nb_sig_cmn++]="VCC";   /* common signal for all modules, if any */
+cmn_sig[nb_sig_cmn++]="VCC+";   /* common signal for all modules, if any */
+cmn_sig[nb_sig_cmn++]="VCC-";   /* common signal for all modules, if any */
+                                 /* add more common signals here */
+/*****************************************************************/
+
+string suffix="x";
+int i,k,cmn;
+
+real GridDist = .025; // in Mil, can be changed to other values
+real xx1,yy1,xx2,yy2,wid,dia,dril,dx,dy,size;
+int ang,first=0;
+string dumy;
+string font[],mirror[];
+
+font[0]="VECTOR";
+font[1]="PROPORTIONAL";
+font[2]="FIXED";
+mirror[0]="";
+mirror[1]="M";
+
+dumy=scr_path;
+dumy=dumy+"duplicated_schematic.scr";
+
+corner_down_left_x *= 254000.;
+corner_up_right_x *= 254000.;
+corner_down_left_y *= 254000.;
+corner_up_right_y *= 254000.;
+
+output(dumy) {
+   printf("Set wire_bend 2\n");
+//   printf("Grid inch %f\n",GridDist);
+
+   for(i=1;i<=nbr_modules;i++) {
+      if(direction==VERT) {
+         dx=offsetx;
+         dy=(i-1)*deltay+offsety;
+         }
+      else {
+         dx=(i-1)*deltax+offsetx;
+         dy=offsety;
+         }
+      schematic(S) {
+         S.parts(P) {
+            first=0;
+            P.instances(I) {
+               if(I.sheet) {
+                  if(I.x<corner_down_left_x) continue;
+                  if(I.x>corner_up_right_x) continue;
+                  if(I.y<corner_down_left_y) continue;
+                  if(I.y>corner_up_right_y) continue;
+                  xx1= I.x/254000.+dx;
+                  yy1= I.y/254000.+dy;
+                  ang = I.angle;
+                  if(!first) printf("add '%s%s%d' '%s' %s@%s R%d (%f %f) \n",
+                     P.name,suffix,i,I.gate.name,P.device.name,P.device.library,ang,xx1,yy1);
+                  else printf(" '%s' R%d (%f %f) \n",
+                     I.gate.name,ang,xx1,yy1);
+                  first=1;
+                  }
+               }  /* I */
+            first=0;
+            P.instances(I) {
+               if(I.sheet) {
+                  if(I.x<corner_down_left_x) continue;
+                  if(I.x>corner_up_right_x) continue;
+                  if(I.y<corner_down_left_y) continue;
+                  if(I.y>corner_up_right_y) continue;
+                  xx1= I.x/254000.+dx;
+                  yy1= I.y/254000.+dy;
+                  ang = I.angle;
+                  if(!first)
+                     if((P.device.value =="On") && (I.value !=""))printf("value %s (%f %f) \n",I.value,xx1,yy1);
+                  first=1;
+                  }
+               }  /* I */
+            } /* P */
+         S.sheets(SH) {
+            SH.nets(N){
+               cmn=0;
+               for(k=1;k<=nb_sig_cmn;k++) if(N.name==cmn_sig[k-1]) cmn=1;
+               N.segments(SEG) {
+                  SEG.wires(w) {
+                     if(w.x1<corner_down_left_x) continue;
+                     if(w.x1>corner_up_right_x) continue;
+                     if(w.y1<corner_down_left_y) continue;
+                     if(w.y1>corner_up_right_y) continue;
+
+                     if(w.x2<corner_down_left_x) continue;
+                     if(w.x2>corner_up_right_x) continue;
+                     if(w.y2<corner_down_left_y) continue;
+                     if(w.y2>corner_up_right_y) continue;
+
+                     xx1= w.x1/254000.+dx;
+                     yy1= w.y1/254000.+dy;
+                     xx2= w.x2/254000.+dx;
+                     yy2= w.y2/254000.+dy;
+                     if(cmn==0) printf("net %s%s%d (%f %f) (%f %f)\n",N.name,suffix,i,xx1,yy1,xx2,yy2);
+                     else printf("net %s (%f %f) (%f %f)\n",N.name,xx1,yy1,xx2,yy2);
+                     } /* W */
+                  } /* SEG  */
+               } /*  N  */
+            SH.texts(t) {
+               if(t.x<corner_down_left_x) continue;
+               if(t.x>corner_up_right_x) continue;
+               if(t.y<corner_down_left_y) continue;
+               if(t.y>corner_up_right_y) continue;
+
+               xx1= t.x/254000.+dx;
+               yy1= t.y/254000.+dy;
+               size= t.size/254000.;              
+               printf("change layer %d\n",t.layer);
+               printf("change ratio %d\n",t.ratio);
+               printf("change size %f\n",size);
+               printf("change font %s\n",font[t.font]);
+               printf("text '%s' %sR%f (%f %f)\n",t.value,
+                     mirror[t.mirror],t.angle,xx1,yy1);
+               }
+            } /* SH */
+         }  /* S */
+      } /* for i */
+   printf("window fit;\n");
+   }

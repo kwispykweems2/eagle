@@ -1,0 +1,55 @@
+/**********************************************************************************
+*  Filename: position.ulp                                                         *
+*  Author: Diehl Martin (freeio.org)                                              *
+*  Date: 2006-2-27                                                                *
+*  License: GNU GPL                                                               *
+*                                                                                 *
+*  This EAGLE User Language Program prints a board's partlist including the       *
+*  position and orientation of each part.                                         *                                                                          *                                                                                 *
+* History: based on 4quad.ulp by Sven Petersen                                    *
+* 1. Changed language to English.                                                 *
+* 2. Changed output to comma-delimited to ease import into spreadsheet/database.  *
+* 3. Output file is filename.csv - Comma Separated Value,                         *
+*     which seems to be the standard extension for such files.                    *
+* 4. Tested with Eagle 4.14, and generates the file without throwing any errors.  *
+* 5. Filename.csv imports properly into OpenOffice.org and M$ Excel.              *
+**********************************************************************************/
+
+string orientation(real Angle)
+{
+  string s;
+
+  sprintf(s, "%.1f", Angle);
+  for (int i = 0; s[i]; i++)
+      if (s[i] == '.') {
+         if (s[i + 1] == '0')
+            s[i] = 0;
+         break;
+         }
+   return s;
+}
+
+string side(int Mirror)
+{
+  string s;
+
+  if (Mirror){
+     s = "Bottom";
+     }
+     else {
+     s = "Top";
+     }
+  return s;
+}
+
+if (board) board(B) {
+   output(filesetext(B.name, ".csv")) {
+     printf("Mounting coordinates exported from %s on %s\n\n", filename(B.name), t2string(time()));
+     printf("%s\n",
+            "Value,Ref-Des,Size,x(inch),y(inch),Angle,Side");
+     B.elements(E) {
+       printf("%s%s%s%s%s%s%5.3f%s%5.3f%s%s%s%s\n",
+               E.value,",", E.name,",", E.package.name,",", u2inch(E.x),",", u2inch(E.y),",", orientation(E.angle),",", side(E.mirror));
+       }
+     }
+   }

@@ -1,0 +1,120 @@
+#usage "<b>Show object and zoom in</b><p>\n"
+       "For schematic or board<p>"
+       "<author>Author: support@cadsoft.de, with fixes and updates by Eric Stevens estevens@sendec.com</author>"
+
+string   h, cmd = "", sname = "", test="";
+real     x, y, zoom_win = 10;
+int      part = 1, xmin, xmax, ymin, ymax, found = 0;
+
+
+if (board) board(B)
+{
+   zoom_win = zoom_win/2;
+   cmd = "grid mm finest;\n";
+   int Result = dlgDialog("Show and zoom in")
+   {
+      dlgLabel("&Enter Name");
+      dlgStringEdit(sname);
+      dlgHBoxLayout
+      {
+        dlgPushButton("+OK") dlgAccept();
+        dlgPushButton("-Cancel") dlgReject();
+      }
+   };
+   if (Result == 0) exit (0);
+
+      B.elements(E)
+      {
+        if (strupr(sname)==strupr(E.name))
+        {
+           int size_x,size_y;
+           found = 1;
+           x = u2mm(E.x);
+           y = u2mm(E.y);
+           size_x=u2mm(abs(E.package.area.x1-E.package.area.x2));
+           size_y=u2mm(abs(E.package.area.y1-E.package.area.y2));
+ 	   if(size_x>size_y) zoom_win=size_x;
+	   if(size_x==size_y) zoom_win=size_x;
+	   if(size_x<size_y) zoom_win=size_y;
+	   zoom_win=zoom_win/2;
+	   if(zoom_win<20) zoom_win=20;
+        }
+      }
+      h = "";
+      sprintf(h, "Window (%f %f)(%f %f);\n",x-zoom_win, y-zoom_win, x+zoom_win, y+zoom_win);
+
+   if (!found)
+   {
+      sprintf(test,"%s not found!",sname);      
+      dlgMessageBox(test, "&OK");
+      exit(1);
+   }
+   else
+   {
+      cmd += h;
+      cmd += "grid last;\n";
+      cmd += "Show " + sname + "\n";      
+      exit(cmd);
+   }
+}
+
+if (schematic) schematic(SCH)
+{
+   zoom_win = zoom_win/2;
+   cmd = "grid mm finest;\n";
+   int Result = dlgDialog("Show and zoom in")
+   {
+      dlgLabel("&Enter Name");
+      dlgStringEdit(sname);
+      dlgHBoxLayout
+      {
+        dlgPushButton("OK") dlgAccept();
+        dlgPushButton("Cancel") dlgReject();
+      }
+   };
+   if (Result == 0) exit (0);
+
+
+   SCH.sheets(S)
+   {
+     S.parts(P)
+     {
+          if (strupr(sname)==strupr(P.name))
+          {
+           P.instances(I)
+	   {
+             int size_x,size_y;
+             found = 1;
+             x = u2mm(I.x);
+             y = u2mm(I.y);
+             size_x=u2mm(abs(I.gate.symbol.area.x1-I.gate.symbol.area.x2));
+             size_y=u2mm(abs(I.gate.symbol.area.y1-I.gate.symbol.area.y2));
+    	     if(size_x>size_y) zoom_win=size_x;
+	     if(size_x==size_y) zoom_win=size_x;
+	     if(size_x<size_y) zoom_win=size_y;
+	     zoom_win=zoom_win/1.5;
+	     if(zoom_win<30) zoom_win=30;
+           }
+           h = "";
+           sprintf(h, "EDIT .s%d;\nWindow (%f %f)(%f %f);\n",S.number,x-zoom_win, y-zoom_win, x+zoom_win, y+zoom_win);
+          }
+      }
+   }
+
+   if (!found)
+   {
+      sprintf(test,"%s not found!",sname);      
+      dlgMessageBox(test, "&OK");
+      exit(1);
+   }
+   else
+   {
+      cmd += h;
+      cmd += "window;\n";      
+      cmd += "grid last;\n";
+      cmd += "Show " + sname + "\n";
+      exit(cmd);
+   }
+}
+exit(1);
+

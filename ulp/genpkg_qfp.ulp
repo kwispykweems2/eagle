@@ -1,0 +1,200 @@
+#usage	"<b>Generate package QFP v1.0 15/02/06</b><br>"
+	"<br>"
+	"Generates packages for SMT quad flat pack ICs including QFP, SQFP, TQFP, TSQFP and others. Must be run from an empty library package window and all arguments must be specified. Use parameters from the IPC land pattern calculator or the manufacturers datasheet. Pin 1 is located at the top left and all parameters are specified in mm.<br>"
+	"<br>"
+	"Arguments:<br>"
+	"<table>"
+	"<tr><td>pitch</td><td>pin pitch</td></tr>"
+	"<tr><td>pins_a</td><td>pin count (widthwise, one side)</td></tr>"
+	"<tr><td>pins_b</td><td>pin count (lengthwise, one side)</td></tr>"
+	"<tr><td>pad_x</td><td>pad width</td></tr>"
+	"<tr><td>pad_y</td><td>pad length</td></tr>"
+	"<tr><td>pad_space_a</td><td>pad spacing (widthwise, center to center)</td></tr>"
+	"<tr><td>pad_space_b</td><td>pad spacing (lengthwise, center to center)</td></tr>"
+	"<tr><td>keepout_x</td><td>keepout region width</td></tr>"
+	"<tr><td>keepout_y</td><td>keepout region length</td></tr>"
+	"<tr><td>silkscreen_x</td><td>silkscreen region width</td></tr>"
+	"<tr><td>silkscreen_y</td><td>silkscreen region length</td></tr>"
+	"<tr><td>component_l1</td><td>component width (including pins)</td></tr>"
+	"<tr><td>component_l2</td><td>component length (including pins)</td></tr>"
+	"<tr><td>component_t1</td><td>pin length (in contact with pad, not used)</td></tr>"
+	"<tr><td>component_w1</td><td>pin width</td></tr>"
+	"<tr><td>component_a</td><td>component body width</td></tr>"
+	"<tr><td>component_b</td><td>component body length</td></tr>"
+	"<tr><td>component_h</td><td>component body height (not used)</td></tr>"
+	"<tr><td>fiducials</td><td>fiducials on (1) or off (0)</td></tr>"
+	"</table>"
+	"<br>"
+	"Example (IPC-7351A SQFP50P1720X2320X290-128N): RUN genpkg_qfp 0.5 26 38 0.3 1.85 16.3 22.3 18.7 24.7 13.6 19.6 17.2 23.2 0.88 0.22 14 20 2.9 1<br>"
+	"<br>"
+	"Copyright 2006 Weartronics<br>"
+	"http://www.weartronics.com/<br>"
+
+if(package != 1)
+	exit(EXIT_FAILURE);
+
+if(argc != 20)
+	exit(EXIT_FAILURE);
+
+real _LINE_WIDTH = 0.127;
+real _CLEARANCE = 0.254;
+real _TEXT_SIZE = 1.27;
+int _TEXT_RATIO = 10;
+
+real pitch = strtod(argv[1]);
+int pins_a = strtol(argv[2]);
+int pins_b = strtol(argv[3]);
+real pad_x = strtod(argv[4]);
+real pad_y = strtod(argv[5]);
+real pad_space_a = strtod(argv[6]);
+real pad_space_b = strtod(argv[7]);
+real keepout_x = strtod(argv[8]);
+real keepout_y = strtod(argv[9]);
+real silkscreen_x = strtod(argv[10]);
+real silkscreen_y = strtod(argv[11]);
+real component_l1 = strtod(argv[12]);
+real component_l2 = strtod(argv[13]);
+real component_t1 = strtod(argv[14]);
+real component_w1 = strtod(argv[15]);
+real component_a = strtod(argv[16]);
+real component_b = strtod(argv[17]);
+real component_h = strtod(argv[18]);
+int fiducials = strtol(argv[19]);
+
+int ipin;
+
+real xcoord = -(pins_a/2)*pitch;
+
+if(!(pins_a%2))
+	xcoord += pitch/2;
+
+real ycoord = (pins_b/2)*pitch;
+
+if(!(pins_b%2))
+	ycoord -= pitch/2;
+
+string result = "";
+string buffer = "";
+
+void concat()
+{
+	string strings[] = {result, buffer};
+	result = strjoin(strings, ' ');
+}
+
+sprintf(buffer, "GRID mm;"); concat();
+sprintf(buffer, "SET WIRE_BEND 2;"); concat();
+sprintf(buffer, "CHANGE FONT vector;"); concat();
+sprintf(buffer, "CHANGE SIZE %f;", _TEXT_SIZE); concat();
+sprintf(buffer, "CHANGE RATIO %d;", _TEXT_RATIO); concat();
+
+sprintf(buffer, "LAYER Top;"); concat();
+
+ipin = 1;
+
+while(ipin <= pins_b)
+{
+	sprintf(buffer, "SMD %f %f -100 R90 '%d' (-%f %f);", pad_x, pad_y, ipin, pad_space_a/2, ycoord); concat();
+	ycoord -= pitch;
+	ipin++;
+}
+
+ycoord += pitch;
+
+while(ipin <= pins_b + pins_a)
+{
+	sprintf(buffer, "SMD %f %f -100 R0 '%d' (%f -%f);", pad_x, pad_y, ipin, xcoord, pad_space_b/2); concat();
+	xcoord += pitch;
+	ipin++;
+}
+
+xcoord -= pitch;
+
+while(ipin <= pins_b + pins_a + pins_b)
+{
+	sprintf(buffer, "SMD %f %f -100 R90 '%d' (%f %f);", pad_x, pad_y, ipin, pad_space_a/2, ycoord); concat();
+	ycoord += pitch;
+	ipin++;
+}
+
+ycoord -= pitch;
+
+while(ipin <= pins_b + pins_a + pins_b + pins_a)
+{
+	sprintf(buffer, "SMD %f %f -100 R0 '%d' (%f %f);", pad_x, pad_y, ipin, xcoord, pad_space_b/2); concat();
+	xcoord -= pitch;
+	ipin++;
+}
+
+xcoord += pitch;
+
+sprintf(buffer, "LAYER tKeepout;"); concat();
+sprintf(buffer, "WIRE 0 (-%f -%f) (-%f %f) (%f %f) (%f -%f) (-%f -%f);", keepout_x/2, keepout_y/2, keepout_x/2, keepout_y/2, keepout_x/2, keepout_y/2, keepout_x/2, keepout_y/2, keepout_x/2, keepout_y/2); concat();
+
+sprintf(buffer, "LAYER tPlace;"); concat();
+sprintf(buffer, "WIRE %f (-%f -%f) (-%f %f) (%f %f) (%f -%f) (-%f -%f);", _LINE_WIDTH, silkscreen_x/2, silkscreen_y/2, silkscreen_x/2, silkscreen_y/2, silkscreen_x/2, silkscreen_y/2, silkscreen_x/2, silkscreen_y/2, silkscreen_x/2, silkscreen_y/2); concat();
+sprintf(buffer, "CIRCLE 0 (-%f %f) (-%f %f);", pad_space_a/2 + pad_y/2 - 0.25, ycoord + pad_x/2 + _CLEARANCE + 0.25, pad_space_a/2 + pad_y/2 - 0.25, ycoord + pad_x/2 + _CLEARANCE); concat();
+sprintf(buffer, "CIRCLE 0 (-%f %f) (-%f %f);", silkscreen_x/2 - 1, silkscreen_y/2 - 1, silkscreen_x/2 - 1, silkscreen_y/2 - 0.5); concat();
+
+sprintf(buffer, "LAYER tDocu;"); concat();
+sprintf(buffer, "WIRE %f (-%f -%f) (-%f %f) (%f %f) (%f -%f) (-%f -%f);", _LINE_WIDTH, component_a/2, component_b/2, component_a/2, component_b/2, component_a/2, component_b/2, component_a/2, component_b/2, component_a/2, component_b/2); concat();
+sprintf(buffer, "CIRCLE %f (-%f %f) (-%f %f);", _LINE_WIDTH, component_a/2 - 1, component_b/2 - 1, component_a/2 - 1, component_b/2 - 0.5); concat();
+
+ipin = 1;
+
+while(ipin <= pins_b)
+{
+	sprintf(buffer, "RECT (-%f %f) (-%f %f);", component_l1/2, ycoord - component_w1/2, component_a/2, ycoord + component_w1/2); concat();
+	ycoord -= pitch;
+	ipin++;
+}
+
+ycoord += pitch;
+
+while(ipin <= pins_b + pins_a)
+{
+	sprintf(buffer, "RECT (%f -%f) (%f -%f);", xcoord - component_w1/2, component_l2/2, xcoord + component_w1/2, component_b/2); concat();
+	xcoord += pitch;
+	ipin++;
+}
+
+xcoord -= pitch;
+
+while(ipin <= pins_b + pins_a + pins_b)
+{
+	sprintf(buffer, "RECT (%f %f) (%f %f);", component_l1/2, ycoord - component_w1/2, component_a/2, ycoord + component_w1/2); concat();
+	ycoord += pitch;
+	ipin++;
+}
+
+ycoord -= pitch;
+
+while(ipin <= pins_b + pins_a + pins_b + pins_a)
+{
+	sprintf(buffer, "RECT (%f %f) (%f %f);", xcoord - component_w1/2, component_l2/2, xcoord + component_w1/2, component_b/2); concat();
+	xcoord -= pitch;
+	ipin++;
+}
+
+xcoord += pitch;
+
+sprintf(buffer, "LAYER tNames;"); concat();
+sprintf(buffer, "TEXT '>NAME' (-%f %f);", silkscreen_x/2, pad_space_b/2 + pad_y/2 + _CLEARANCE); concat();
+
+sprintf(buffer, "LAYER tValues;"); concat();
+sprintf(buffer, "TEXT '>VALUE' (-%f -%f);", silkscreen_x/2, pad_space_b/2 + pad_y/2 + _CLEARANCE + _TEXT_SIZE); concat();
+
+if(fiducials)
+{
+	sprintf(buffer, "LAYER Top;"); concat();
+	sprintf(buffer, "CIRCLE 0 (-%f -%f) (-%f -%f);", pad_space_a/2, pad_space_b/2, pad_space_a/2, pad_space_b/2 + 0.5); concat();
+	sprintf(buffer, "CIRCLE 0 (%f %f) (%f %f);", pad_space_a/2, pad_space_b/2, pad_space_a/2, pad_space_b/2 + 0.5); concat();
+
+	sprintf(buffer, "LAYER tStop;"); concat();
+	sprintf(buffer, "CIRCLE 0 (-%f -%f) (-%f -%f);", pad_space_a/2, pad_space_b/2, pad_space_a/2, pad_space_b/2 + 1.5); concat();
+	sprintf(buffer, "CIRCLE 0 (%f %f) (%f %f);", pad_space_a/2, pad_space_b/2, pad_space_a/2, pad_space_b/2 + 1.5); concat();
+}
+
+sprintf(buffer, "WINDOW fit;"); concat();
+
+exit(result);

@@ -1,0 +1,59 @@
+#usage "<b>Creates a file of test point coordinates from a board file.</b>\n"
+       "<p>"
+       "Reference designators must begin with 'TP' to be listed.  "
+       "All values are in mils."
+       "<p>"
+       "<author>Author: estevens@sendec.com</author>"
+
+// Version 1.0
+// July 30, 2003
+//
+// Eric A. Stevens
+// SenDEC Corporation
+// Copyright 2003 SenDEC Corporation. All rights reserved.
+
+// THIS PROGRAM IS PROVIDED AS IS AND WITHOUT WARRANTY OF ANY KIND, EXPRESSED OR IMPLIED
+
+string result;
+string fileName;
+int pos;
+
+if (board)
+{
+	board(B)
+	{
+		fileName = dlgFileSave("Save test point coordinates File", filesetext(B.name, ".tp"), "*.tp");
+		if (fileName == "")
+			exit(0);
+
+		string a[];
+		if (!fileglob(a, fileName) || dlgMessageBox("File '" + fileName + "' exists\n\nOverwrite?", "+&Yes", "-&No") == 0)
+		{
+			output(fileName, "w")
+			{
+				printf("Test point coordinates table\n\n");
+				printf("Positional values are in mils\n");
+				printf("Part \tX\t\tY\n");
+			}
+
+	   		B.elements(E)
+	   		{
+	   			pos = strstr(E.name, "TP");
+	   			if (pos == 0)
+	   			{
+					sprintf(result, "%s\t%u\t%u\n", E.name, E.x / 254, E.y / 254);
+
+					output(fileName, "a")
+					{
+		    			printf("%s",result);
+		    		}
+		    	}
+			}
+		}
+	}
+}
+else
+{
+   dlgMessageBox("\n    Start this ULP in a board    \n");
+   exit (0);
+}

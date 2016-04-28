@@ -1,0 +1,171 @@
+# Library script
+# 
+# Exported from e:/repos/projects/Misc/SOC_Shutdown/pcb/SOC_Shutdown/SOC_Shutdown.lbr at  7/10/2007 12:12:01p
+# 
+# EAGLE Version 4.16r1 Copyright (c) 1988-2006 CadSoft
+# 
+Set Wire_Bend 2;
+# Grid changed to 'mm' to avoid loss of precision!
+Grid mm;
+Layer   1 Top;
+Layer   2 Route2;
+Layer   3 Route3;
+Layer   4 Route4;
+Layer   5 Route5;
+Layer   6 Route6;
+Layer   7 Route7;
+Layer   8 Route8;
+Layer   9 Route9;
+Layer  10 Route10;
+Layer  11 Route11;
+Layer  12 Route12;
+Layer  13 Route13;
+Layer  14 Route14;
+Layer  15 Route15;
+Layer  16 Bottom;
+Layer  17 Pads;
+Layer  18 Vias;
+Layer  19 Unrouted;
+Layer  20 Dimension;
+Layer  21 tPlace;
+Layer  22 bPlace;
+Layer  23 tOrigins;
+Layer  24 bOrigins;
+Layer  25 tNames;
+Layer  26 bNames;
+Layer  27 tValues;
+Layer  28 bValues;
+Layer  29 tStop;
+Layer  30 bStop;
+Layer  31 tCream;
+Layer  32 bCream;
+Layer  33 tFinish;
+Layer  34 bFinish;
+Layer  35 tGlue;
+Layer  36 bGlue;
+Layer  37 tTest;
+Layer  38 bTest;
+Layer  39 tKeepout;
+Layer  40 bKeepout;
+Layer  41 tRestrict;
+Layer  42 bRestrict;
+Layer  43 vRestrict;
+Layer  44 Drills;
+Layer  45 Holes;
+Layer  46 Milling;
+Layer  47 Measures;
+Layer  48 Document;
+Layer  49 Reference;
+Layer  51 tDocu;
+Layer  52 bDocu;
+Layer  91 Nets;
+Layer  92 Busses;
+Layer  93 Pins;
+Layer  94 Symbols;
+Layer  95 Names;
+Layer  96 Values;
+Layer 100 Keys;
+Layer 101 SOC_BOARD;
+Layer 102 HOUR_BOARD;
+Layer 103 BOARD_ORIGIN;
+Description '';
+
+Edit SOC_SHUTDOWN.pac;
+Description '';
+Change Drill 1.778;Pad '5' Round 0 R0 (4.699 15.0622);
+Change Drill 1.778;Pad '7' Round 0 R0 (28.067 16.383);
+Change Drill 1.778;Pad '6' Round 0 R0 (4.699 2.8702);
+Change Drill 1.778;Pad '8' Round 0 R0 (28.067 4.1402);
+Change Drill 1.1684;Pad '1' Round 0 R0 (7.5692 16.3322);
+Change Drill 1.1684;Pad '3' Round 0 R0 (25.1968 16.3322);
+Change Drill 1.1684;Pad '2' Round 0 R0 (7.5692 2.8702);
+Change Drill 1.1684;Pad '4' Round 0 R0 (25.1968 2.8702);
+Layer 21;
+Change Style Continuous;
+Wire  0.0508 (3.2766 19.2024) (3.2766 18.2118);
+Wire  0.0508 (0 19.2024) (3.2766 19.2024);
+Wire  0.0508 (3.2766 18.2118) +180 (4.8006 18.1864) (4.8006 19.2024) (32.766 19.2024) \
+      (32.766 0);
+Wire  0.0508 (0 0) (0 19.2024);
+Wire  0.0508 (32.766 0) (29.464 0) (29.464 1.143) +180 (27.94 1.143) \
+      (27.94 0) (0 0);
+Layer 21;
+Change Size 1.27;
+Change Ratio 8;
+Change Font Proportional;
+Text '>NAME' R90 (1.9558 12.7762);
+
+Edit SOC_SHUTDOWN_ROUND.pac;
+Description '';
+Layer 20;
+Wire  0.0762 (0 0) (24.13 0);
+Wire  0.0762 (0 38.735) (9.525 38.735) (9.525 29.718);
+Wire  0.0762 (15.875 29.718) (15.875 38.735) (24.13 38.735);
+Wire  0.0762 (9.525 29.718) +180 (15.875 29.718);
+Wire  0.0762 (0 0) -116.158 (0 38.735);
+Wire  0.0762 (24.13 38.735) -116.158 (24.13 0);
+Layer 103;
+Wire  0.0254 (7.493 19.3675) (17.5895 19.3675);
+Wire  0.0254 (12.065 23.622) (12.065 15.494);
+Layer 100;
+Wire  0.0254 (1.3716 20.2311) (-0.762 20.2311) (-0.762 17.3101) (0.254 17.3101) \
+      (0.254 18.5801) (1.3716 18.5801) (1.3716 20.2311);
+Wire  0.0254 (11.684 -1.0287) (11.684 1.0287) (12.446 1.0287) (12.446 -1.0287);
+Wire  0.0254 (23.876 -1.0287) (23.876 1.0287) (24.892 1.0287) (24.892 -1.0287);
+Layer 100;
+Circle 0.0254 (-2.794 29.2481) (-2.0828 29.2481);
+Layer 100;
+Wire  0.0254 (24.892 21.7551) (28.4734 21.7551) (28.4734 22.7711) (24.892 22.7711) \
+      (24.892 21.7551);
+Wire  0.0254 (24.892 35.7251) (28.4734 35.7251) (28.4734 36.7411) (24.892 36.7411) \
+      (24.892 35.7251);
+Layer 101;
+Wire  0.0762 (23.622 14.1605) (23.622 18.3515) (0.508 18.3515) (0.508 14.1605) \
+      (-4.445 14.1605) (-4.445 3.2385) (0.508 3.2385) (0.508 -0.9525) \
+      (11.303 -0.9525) (11.303 1.7145) (12.827 1.7145) (12.827 -0.9525) \
+      (23.622 -0.9525) (23.622 3.2385) (28.575 3.2385) (28.575 14.1605) \
+      (23.622 14.1605);
+Change Drill 1.5214;Pad '1' Square 0 R0 (3.3782 1.9177);
+Change Drill 1.5214;Pad '2' Round 0 R0 (21.0058 1.9177);
+Change Drill 1.5214;Pad '3' Round 0 R0 (21.0058 15.3797);
+Change Drill 1.5214;Pad '4' Round 0 R0 (3.3782 15.3797);
+Layer 102;
+Wire  0.0762 (-4.318 22.9235) (2.032 22.9235) (2.032 18.4785) (22.352 18.4785) \
+      (22.352 22.9235) (28.702 22.9235) (28.702 35.6235) (22.352 35.6235) \
+      (22.352 39.5605) (7.112 39.5605) (7.112 35.6235) (-4.318 35.6235) \
+      (-4.318 22.9235);
+Wire  0.0762 (14.986 27.0891) (14.986 37.8841) (10.414 37.8841) (10.414 27.0891);
+Wire  0.0762 (14.986 27.0891) (10.414 27.0891);
+Layer 102;
+Circle 0.0762 (-2.794 29.2481) (-1.794 29.2481);
+Layer 102;
+Change Spacing 1.27;
+Change Pour Solid;
+Change Rank 0;
+Polygon 0.0762  (16.256 35.306) (22.606 35.306) (22.606 32.258) (21.463 32.258) \
+      (21.463 30.353) (18.288 30.353) (18.288 32.258) (16.256 32.258) \
+      (16.256 35.306);
+Layer 102;
+Change Spacing 1.27;
+Change Pour Solid;
+Change Rank 0;
+Polygon 0.0762  (-2.032 35.306) (5.588 35.306) (5.588 32.258) (3.429 32.258) \
+      (3.429 30.353) (0.127 30.353) (0.127 32.258) (-2.032 32.258) \
+      (-2.032 35.306);
+Change Drill 1.1684;Pad '5' Round 0 R0 (0.508 33.02);
+Change Drill 1.1684;Pad '6' Round 0 R0 (3.048 33.02);
+Change Drill 1.1684;Pad '7' Round 0 R0 (18.542 33.02);
+Change Drill 1.1684;Pad '8' Round 0 R0 (21.082 33.02);
+Layer 21;
+Change Size 1.27;
+Change Ratio 8;
+Text '>NAME' R0 (6.223 0.762);
+Layer 46;
+Wire  1.524 (-2.032 33.02) (5.588 33.02);
+Layer 1;
+Smd '9' 10.795 3.175 -100 R0 (1.778 33.02);
+Layer 1;
+Smd '10' 10.795 3.175 -100 R0 (19.812 32.766);
+Layer 46;
+Wire  1.524 (16.002 32.766) (23.622 32.766);
+Grid mil;
