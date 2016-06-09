@@ -142,6 +142,29 @@
 <smd name="2" x="3.556" y="0" dx="2.794" dy="3.81" layer="1"/>
 <text x="-2.794" y="-4.572" size="1.27" layer="25">&gt;NAME</text>
 </package>
+<package name="POWERMITE3">
+<smd name="1" x="-0.9144" y="0" dx="0.9652" dy="0.762" layer="1"/>
+<smd name="2" x="0.9144" y="0" dx="0.9652" dy="0.762" layer="1"/>
+<smd name="3" x="0" y="3.81" dx="4.826" dy="5.334" layer="1"/>
+<text x="-2.54" y="6.858" size="1.27" layer="25">&gt;NAME</text>
+<rectangle x1="-2.032" y1="1.143" x2="2.032" y2="5.5372" layer="51"/>
+<rectangle x1="-1.3589" y1="0.381" x2="-0.4699" y2="1.143" layer="21"/>
+<rectangle x1="-1.3589" y1="-0.2794" x2="-0.4699" y2="1.143" layer="51"/>
+<rectangle x1="0.4699" y1="-0.2794" x2="1.3589" y2="1.143" layer="51"/>
+<rectangle x1="0.4699" y1="0.381" x2="1.3589" y2="1.143" layer="21"/>
+<rectangle x1="-0.889" y1="5.5372" x2="0.889" y2="6.223" layer="51"/>
+</package>
+<package name="DO-214BA(GF1)">
+<wire x1="2.3749" y1="1.4478" x2="-2.3749" y2="1.4478" width="0.127" layer="21"/>
+<wire x1="-2.3749" y1="1.4478" x2="-2.3749" y2="-1.4478" width="0.127" layer="21"/>
+<wire x1="-2.3749" y1="-1.4478" x2="2.3749" y2="-1.4478" width="0.127" layer="21"/>
+<wire x1="2.3749" y1="-1.4478" x2="2.3749" y2="1.4478" width="0.127" layer="21"/>
+<smd name="1" x="-2.032" y="0" dx="1.524" dy="1.6764" layer="1"/>
+<smd name="2" x="2.032" y="0" dx="1.524" dy="1.6764" layer="1"/>
+<text x="-2.794" y="2.54" size="1.27" layer="25">&gt;NAME</text>
+<text x="-2.794" y="-3.556" size="1.27" layer="27">&gt;VALUE</text>
+<rectangle x1="-1.8669" y1="-1.4478" x2="-0.8509" y2="1.4478" layer="21"/>
+</package>
 </packages>
 <symbols>
 <symbol name="WB_DIODE">
@@ -168,6 +191,33 @@
 <text x="2.54" y="-2.3114" size="1.778" layer="96">&gt;VALUE</text>
 <pin name="A" x="-2.54" y="0" visible="off" length="short" direction="pas"/>
 <pin name="C" x="2.54" y="0" visible="off" length="short" direction="pas" rot="R180"/>
+</symbol>
+<symbol name="SCHOTTKY3">
+<wire x1="-1.27" y1="-1.27" x2="1.27" y2="0" width="0.254" layer="94"/>
+<wire x1="1.27" y1="0" x2="-1.27" y2="1.27" width="0.254" layer="94"/>
+<wire x1="1.905" y1="1.27" x2="1.27" y2="1.27" width="0.254" layer="94"/>
+<wire x1="1.27" y1="1.27" x2="1.27" y2="0" width="0.254" layer="94"/>
+<wire x1="-1.27" y1="1.27" x2="-1.27" y2="-1.27" width="0.254" layer="94"/>
+<wire x1="1.27" y1="0" x2="1.27" y2="-1.27" width="0.254" layer="94"/>
+<wire x1="1.905" y1="1.27" x2="1.905" y2="1.016" width="0.254" layer="94"/>
+<wire x1="1.27" y1="-1.27" x2="0.635" y2="-1.27" width="0.254" layer="94"/>
+<wire x1="0.635" y1="-1.016" x2="0.635" y2="-1.27" width="0.254" layer="94"/>
+<text x="-2.286" y="1.905" size="1.778" layer="95">&gt;NAME</text>
+<text x="0.254" y="-3.429" size="1.778" layer="96">&gt;VALUE</text>
+<pin name="A1" x="-2.54" y="0" visible="off" length="short" direction="pas"/>
+<pin name="K" x="2.54" y="0" visible="off" length="short" direction="pas" rot="R180"/>
+<pin name="A2" x="-2.54" y="-2.54" visible="off" length="short" rot="R90"/>
+</symbol>
+<symbol name="DIODE-1">
+<wire x1="-1.27" y1="-1.27" x2="1.27" y2="0" width="0.254" layer="94"/>
+<wire x1="1.27" y1="0" x2="-1.27" y2="1.27" width="0.254" layer="94"/>
+<wire x1="1.27" y1="1.27" x2="1.27" y2="0" width="0.254" layer="94"/>
+<wire x1="-1.27" y1="1.27" x2="-1.27" y2="-1.27" width="0.254" layer="94"/>
+<wire x1="1.27" y1="0" x2="1.27" y2="-1.27" width="0.254" layer="94"/>
+<text x="2.54" y="0.4826" size="1.778" layer="95">&gt;NAME</text>
+<text x="2.54" y="-2.3114" size="1.778" layer="96">&gt;VALUE</text>
+<pin name="A" x="-2.54" y="0" visible="pad" length="short" direction="pas"/>
+<pin name="C" x="2.54" y="0" visible="pad" length="short" direction="pas" rot="R180"/>
 </symbol>
 </symbols>
 <devicesets>
@@ -287,6 +337,71 @@ Fast response: 1.8us&lt;br&gt;
 </gates>
 <devices>
 <device name="" package="SMA">
+<connects>
+<connect gate="G$1" pin="A" pad="2"/>
+<connect gate="G$1" pin="C" pad="1"/>
+</connects>
+<technologies>
+<technology name="A">
+<attribute name="VRRM" value="50"/>
+</technology>
+<technology name="B">
+<attribute name="VRRM" value="100"/>
+</technology>
+<technology name="D">
+<attribute name="VRRM" value="200"/>
+</technology>
+<technology name="G">
+<attribute name="VRRM" value="400"/>
+</technology>
+<technology name="J">
+<attribute name="VRRM" value="600"/>
+</technology>
+<technology name="K">
+<attribute name="VRRM" value="800"/>
+</technology>
+<technology name="M">
+<attribute name="VRRM" value="1000"/>
+</technology>
+</technologies>
+</device>
+</devices>
+</deviceset>
+<deviceset name="UPS1040?" prefix="D">
+<description>&lt;b&gt;10A Low Vf Schottky Barrier Rectifier&lt;/b&gt;&lt;p&gt;
+
+40V Vprr&lt;br&gt;
+10A Iavg,o&lt;br&gt;
+Available in Powermite(DO-216AA) and Powermite3 (3.2degC/Watt)&lt;p&gt;
+*Also diode pair in CTE3 version of Powermite3&lt;p&gt;
+
+Microsemi - Scottsdale Division</description>
+<gates>
+<gate name="G$1" symbol="SCHOTTKY3" x="0" y="0"/>
+</gates>
+<devices>
+<device name="E3" package="POWERMITE3">
+<connects>
+<connect gate="G$1" pin="A1" pad="1"/>
+<connect gate="G$1" pin="A2" pad="2"/>
+<connect gate="G$1" pin="K" pad="3"/>
+</connects>
+<technologies>
+<technology name=""/>
+</technologies>
+</device>
+</devices>
+</deviceset>
+<deviceset name="GF1*-E3/67A" prefix="D">
+<description>&lt;h1&gt;Rectifier Single Surface Mount&lt;/h1&gt;
+
+DO-214BA (GF1) package&lt;br&gt;
+1.0A, 50V-1000V</description>
+<gates>
+<gate name="G$1" symbol="DIODE-1" x="0" y="0"/>
+</gates>
+<devices>
+<device name="" package="DO-214BA(GF1)">
 <connects>
 <connect gate="G$1" pin="A" pad="2"/>
 <connect gate="G$1" pin="C" pad="1"/>
